@@ -1,0 +1,22 @@
+{
+  "name": "cmcapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbJonas/cmcAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bbJonas/cmcAPI/issues"
+  },
+  "homepage": "https://github.com/bbJonas/cmcAPI#readme",
+  "dependencies": {
+    "request-promise": "^4.2.6"
+  }
+}
