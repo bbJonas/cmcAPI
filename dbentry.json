@@ -1,0 +1,17 @@
+{
+status:
+{ timestamp: status.timestamp,
+     error_code: status.error_code,
+     error_message: status.error_message},
+data:
+[{id: coin.id,
+  name: coin.name,
+  symbol: coin.symbol,
+  cmc_rank: coin.cmc_rank,
+  last_updated: coin.last_updated,
+  EUR: {price: coin.quote.EUR.price,
+        volume_24h: coin.quote.EUR.volume_24h,
+        market_cap: coin.quote.EUR.market_cap
+        }
+  }
+]}

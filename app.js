@@ -21,11 +21,12 @@ const requestOptions = {
   gzip: true
 };
 
-
+var rawData = {};
 
 rp(requestOptions).then(response => {
-  console.log(response);
-  database.insert({response});
+  rawData = response;
 }).catch((err) => {
   console.log('API call error:', err.message);
 });
+
+console.log(rawData);
