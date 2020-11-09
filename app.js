@@ -1,13 +1,17 @@
 /* Example in Node.js ES6 using request-promise */
-const request = require('request')
+const request = require('request');
 const rp = require('request-promise');
+const Datastore = require('nedb');
+
+const database = new Datastore('database.db');
+database.loadDatabase();
 
 const requestOptions = {
   method: 'GET',
   uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
   qs: {
     'start': '1',
-    'limit': '50',
+    'limit': '5',
     'convert': 'EUR'
   },
   headers: {
@@ -17,22 +21,11 @@ const requestOptions = {
   gzip: true
 };
 
+
+
 rp(requestOptions).then(response => {
-    //console.log('API call response:', response);
-    
-    var addMarketCapRank = function(rawData){
-        rawData.data.forEach((coin) => {
-            console.log(coin.name);
-            console.log('Price (USD):');
-            console.log(coin.quote.EUR.price);
-            console.log('MarketCap:');
-            console.log(coin.quote.EUR.volume_24h)
-            console.log('   ')
-        })
-    };
-    
-addMarketCapRank(response);
-    
+  console.log(response);
+  database.insert({response});
 }).catch((err) => {
   console.log('API call error:', err.message);
 });
