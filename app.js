@@ -21,12 +21,34 @@ const requestOptions = {
   gzip: true
 };
 
-var rawData = {};
 
 rp(requestOptions).then(response => {
-  rawData = response;
+  var cleanedData = {
+  status:
+  { timestamp: response.status.timestamp,
+       error_code: response.status.error_code,
+       error_message: response.status.error_message},
+  data: []
+};
+
+response.data.forEach((coin) => {
+  var cleanedCoin = {id: coin.id,
+    name: coin.name,
+    symbol: coin.symbol,
+    cmc_rank: coin.cmc_rank,
+    last_updated: coin.last_updated,
+    EUR: {price: coin.quote.EUR.price,
+          volume_24h: coin.quote.EUR.volume_24h,
+          market_cap: coin.quote.EUR.market_cap
+          }
+    }
+    cleanedData.data.push(cleanedCoin);
+})
+return cleanedData;
+}).then(result => {
+  database.insert(result, function (err, newDoc) {
+  console.log(newDoc);
+})
 }).catch((err) => {
   console.log('API call error:', err.message);
 });
-
-console.log(rawData);
