@@ -21,6 +21,8 @@ const requestOptions = {
   gzip: true
 };
 
+var blacklist = ["XRP", "USDT"];
+var notOnBlacklist = ((coin) => !blacklist.includes(coin));     // var found = blacklist.includes("XRP");
 
 rp(requestOptions).then(response => {
   var cleanedData = {
@@ -37,12 +39,14 @@ response.data.forEach((coin) => {
     symbol: coin.symbol,
     cmc_rank: coin.cmc_rank,
     last_updated: coin.last_updated,
-    EUR: {price: coin.quote.EUR.price,
-          volume_24h: coin.quote.EUR.volume_24h,
-          market_cap: coin.quote.EUR.market_cap
-          }
+    price: coin.quote.EUR.price,
+    volume_24h: coin.quote.EUR.volume_24h,
+    market_cap: coin.quote.EUR.market_cap
     }
-    cleanedData.data.push(cleanedCoin);
+    if (notOnBlacklist(cleanedCoin.symbol)) {
+        cleanedData.data.push(cleanedCoin);
+    }
+
 })
 return cleanedData;
 }).then(result => {
