@@ -11,7 +11,7 @@ const requestOptions = {
   uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
   qs: {
     'start': '1',
-    'limit': '5',
+    'limit': '20',
     'convert': 'EUR'
   },
   headers: {

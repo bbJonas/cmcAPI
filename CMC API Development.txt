@@ -1,0 +1,24 @@
+CMC API Development:
+
+Database import to Excel:
+
+Manuell
+
+= Record.ToTable(Quelle)
+= #"In Tabelle konvertiert"{1}[Value]
+= Table.FromList(Value, Splitter.SplitByNothing(), null, null, ExtraValues.Error)
+= Table.ExpandRecordColumn(#"In Tabelle konvertiert1", "Column1", {"id", "name", "symbol", "cmc_rank", "last_updated", "EUR"}, {"Column1.id", "Column1.name", "Column1.symbol", "Column1.cmc_rank", "Column1.last_updated", "Column1.EUR"})
+= Table.ExpandRecordColumn(#"Erweiterte Column1", "Column1.EUR", {"price", "volume_24h", "market_cap"}, {"Column1.EUR.price", "Column1.EUR.volume_24h", "Column1.EUR.market_cap"})
+
+
+Erweiterter Editor Excel:
+
+let
+    Quelle = Json.Document(File.Contents("C:\Users\BitBunker\Documents\GitHub\cmcAPI\databaseCopy.json")),
+    #"In Tabelle konvertiert" = Record.ToTable(Quelle),
+    Value = #"In Tabelle konvertiert"{1}[Value],
+    #"In Tabelle konvertiert1" = Table.FromList(Value, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Erweiterte Column1" = Table.ExpandRecordColumn(#"In Tabelle konvertiert1", "Column1", {"id", "name", "symbol", "cmc_rank", "last_updated", "EUR"}, {"Column1.id", "Column1.name", "Column1.symbol", "Column1.cmc_rank", "Column1.last_updated", "Column1.EUR"}),
+    #"Erweiterte Column1.EUR" = Table.ExpandRecordColumn(#"Erweiterte Column1", "Column1.EUR", {"price", "volume_24h", "market_cap"}, {"Column1.EUR.price", "Column1.EUR.volume_24h", "Column1.EUR.market_cap"})
+in
+    #"Erweiterte Column1.EUR"
