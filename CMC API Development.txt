@@ -26,22 +26,34 @@ in
 
 
 
-Variablen:
-  1. Import der Top X Daten
-  2. X Coins in Basket (basketSize)
-  3. Fiat Vergleichswährung (fiatRef)
-  4. Coin aktueller Score (0-2)
-  5. Coin gesamtbewertung (csRank)
-  6. Coin annteil am Marketcap der basketSize
+    Variablen:
+      1. Import der Top X Daten
+      2. X Coins in Basket (basketSize)
+      3. Fiat Vergleichswährung (fiatRef)
+      4. Coin aktueller Score (0-2)
+      5. Coin gesamtbewertung (csRank) Muss Zahl zw. 0-1 sein! Manuell
+      6. Coin annteil am Marketcap der basketSize
+      7. BasketBestand (1 / 0)
+      8. DeadCoin (XRP)
+      9. NewMarketCap (Addition der top X MarketCaps)
 
+    Schritte:
+      1. Variable setzen
+      2. Import der Daten von CMC
+      3. Rank-Marketcap (gegeben)
+      4. Rank-Volume bestimmen und zu Datensatz hinzufügen
+      5. Rank-Marketcap <= basketSize (wenn Ja: +1)
+      6. Rank-Volume <= basketSize  (wenn Ja: +1)
+      7. Coin aktueller Score = 5. + 6.
+      8. Coin im Basket?
+      8.5: If (Coin.Aktueller (alle coins) Score >=1)>(BasketSize)) then
+      9.      If Coin.Aktueller Score = 1
+                      Then Coin.AktuellerScore + Coin.csRank
 
-Schritte:
-  1. Variable setzen
-  2. Import der Daten von CMC
-  3. Rank-Marketcap (gegeben)
-  4. Rank-Volume bestimmen und zu Datensatz hinzufügen
-  5. Rank-Marketcap <= basketSize (wenn Ja: +1)
-  6. Rank-Volume <= basketSize  (wenn Ja: +1)
-  7. Coin aktueller Score = 5. + 6.
-  8. Coin im Basket?
-  8.5: Wenn (Coins >=1)>(BasketSize)
+    10. If Coin.AktuellerScore = max(5).Coin.AkutuellerScore
+    11.    then coin.BasketBestand (1)
+
+    12. NewMarketCap = coin.marketcap if coin.BasketBestand = 1
+    13. Coin.Anteil = coin.MarketCap /NewMarketCap
+
+    Print BasketBestand + Coin.Anteil
