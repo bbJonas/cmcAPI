@@ -2,7 +2,7 @@ CMC API Development:
 
 Database import to Excel:
 
-Manuell
+// Manuell:
 
 = Record.ToTable(Quelle)
 = #"In Tabelle konvertiert"{1}[Value]
@@ -11,7 +11,8 @@ Manuell
 = Table.ExpandRecordColumn(#"Erweiterte Column1", "Column1.EUR", {"price", "volume_24h", "market_cap"}, {"Column1.EUR.price", "Column1.EUR.volume_24h", "Column1.EUR.market_cap"})
 
 
-Erweiterter Editor Excel:
+
+// Erweiterter Editor Excel:
 
 let
     Quelle = Json.Document(File.Contents("C:\Users\BitBunker\Documents\GitHub\cmcAPI\databaseCopy.json")),
@@ -22,3 +23,25 @@ let
     #"Erweiterte Column1.EUR" = Table.ExpandRecordColumn(#"Erweiterte Column1", "Column1.EUR", {"price", "volume_24h", "market_cap"}, {"Column1.EUR.price", "Column1.EUR.volume_24h", "Column1.EUR.market_cap"})
 in
     #"Erweiterte Column1.EUR"
+
+
+
+Variablen:
+  1. Import der Top X Daten
+  2. X Coins in Basket (basketSize)
+  3. Fiat Vergleichswährung (fiatRef)
+  4. Coin aktueller Score (0-2)
+  5. Coin gesamtbewertung (csRank)
+  6. Coin annteil am Marketcap der basketSize
+
+
+Schritte:
+  1. Variable setzen
+  2. Import der Daten von CMC
+  3. Rank-Marketcap (gegeben)
+  4. Rank-Volume bestimmen und zu Datensatz hinzufügen
+  5. Rank-Marketcap <= basketSize (wenn Ja: +1)
+  6. Rank-Volume <= basketSize  (wenn Ja: +1)
+  7. Coin aktueller Score = 5. + 6.
+  8. Coin im Basket?
+  8.5: Wenn (Coins >=1)>(BasketSize)
