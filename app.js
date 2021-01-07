@@ -33,11 +33,14 @@ rp(requestOptions).then(response => {
   data: []
 };
 
+var marketCap_rank = 1;
+
 response.data.forEach((coin) => {
   var cleanedCoin = {id: coin.id,
     name: coin.name,
     symbol: coin.symbol,
     cmc_rank: coin.cmc_rank,
+    marketCap_rank: marketCap_rank,
     last_updated: coin.last_updated,
     price: coin.quote.EUR.price,
     volume_24h: coin.quote.EUR.volume_24h,
@@ -45,6 +48,7 @@ response.data.forEach((coin) => {
     }
     if (notOnBlacklist(cleanedCoin.symbol)) {
         cleanedData.data.push(cleanedCoin);
+        marketCap_rank ++;
     }
 
 })
