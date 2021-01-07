@@ -21,6 +21,8 @@ const requestOptions = {
   gzip: true
 };
 
+var basketSize = 5;
+
 var blacklist = ["XRP", "USDT"];
 var notOnBlacklist = ((coin) => !blacklist.includes(coin));     // var found = blacklist.includes("XRP");
 
@@ -36,23 +38,70 @@ rp(requestOptions).then(response => {
 var marketCap_rank = 1;
 
 response.data.forEach((coin) => {
-  var cleanedCoin = {id: coin.id,
-    name: coin.name,
-    symbol: coin.symbol,
-    cmc_rank: coin.cmc_rank,
-    marketCap_rank: marketCap_rank,
-    last_updated: coin.last_updated,
-    price: coin.quote.EUR.price,
-    volume_24h: coin.quote.EUR.volume_24h,
-    market_cap: coin.quote.EUR.market_cap
-    }
-    if (notOnBlacklist(cleanedCoin.symbol)) {
-        cleanedData.data.push(cleanedCoin);
-        marketCap_rank ++;
-    }
+  if (notOnBlacklist(coin.symbol)) {
+
+    var cleanedCoin = {id: coin.id,
+      name: coin.name,
+      symbol: coin.symbol,
+      cmc_rank: coin.cmc_rank,
+      marketCap_rank: marketCap_rank,
+      last_updated: coin.last_updated,
+      price: coin.quote.EUR.price,
+      volume_24h: coin.quote.EUR.volume_24h,
+      market_cap: coin.quote.EUR.market_cap
+      }
+      marketCap_rank ++;
+      cleanedData.data.push(cleanedCoin);
+  }
 
 })
 return cleanedData;
+}).then(result => {
+
+  var data = result;
+
+  function compare(a, b) {
+
+  const volumeA = a.volume_24h;
+  const volumeB = b.volume_24h;
+
+  let comparison = 0;
+  if (volumeA > volumeB) {
+    comparison = 1;
+  } else if (volumeA < volumeB) {
+    comparison = -1;
+  }
+  return comparison * -1;
+}
+
+var volumeData = [];
+
+result.data.forEach((coin) => {
+  volumeData.push({symbol: coin.symbol, volume_24h: coin.volume_24h})
+});
+
+volumeData.sort(compare);
+
+
+volumeData.forEach((coin) => {
+  indexOfCoin = volumeData.indexOf(coin)+1;
+  var picked = data.data.find(o => o.symbol === coin.symbol);  // Super zum Objekte manipulieren!
+  picked.volume_rank = indexOfCoin;
+});
+
+data.data.forEach((coin) => {
+  var picked = data.data.find(o => o.symbol === coin.symbol);
+  var i = 0;
+  if (coin.marketCap_rank <= 5) {
+    i++
+  }
+  if (coin.volume_rank <= 5) {
+    i++
+  }
+  picked.current_rating = i;
+});
+
+return data
 }).then(result => {
   database.insert(result, function (err, newDoc) {
   console.log(newDoc);
