@@ -23,7 +23,7 @@ const requestOptions = {
 
 var basketSize = 5;
 
-var blacklist = ["XRP"];
+var blacklist = ["XRP","USDT","BNB","BUSD"];
 var notOnBlacklist = ((coin) => !blacklist.includes(coin));     // var found = blacklist.includes("XRP");
 
 rp(requestOptions).then(response => {
